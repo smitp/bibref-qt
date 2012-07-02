@@ -1,9 +1,11 @@
-#include <QApplication>
-#include <QtCore>
+#include <QtGui/QApplication>
+#include "widget.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QApplication a(argc, argv);
+    Widget w;
+    w.show();
 
-    return app.exec();
+    return a.exec();
 }
