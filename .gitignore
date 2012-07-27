@@ -3,7 +3,7 @@
 *.lo
 *.o
 moc_*
-
+*.pro.user
 # Compiled Dynamic libraries
 *.so
 

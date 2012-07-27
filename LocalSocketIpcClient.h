@@ -24,7 +24,6 @@ public slots:
 private:
     QLocalSocket*   m_socket;
     quint16         m_blockSize;
-    QString         m_message;
     QString         m_serverName;
 };
 

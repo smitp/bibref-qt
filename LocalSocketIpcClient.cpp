@@ -1,6 +1,7 @@
 #include "LocalSocketIpcClient.h"
 
 #include <QDebug>
+#include <QDataStream>
 
 LocalSocketIpcClient::LocalSocketIpcClient(QString remoteServername, QObject *parent) :
         QObject(parent)
@@ -34,11 +35,10 @@ void LocalSocketIpcClient::send_MessageToServer(QString message) {
         return;
     }
 
-    m_message = message;
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
-    out << m_message;
+    out << message;
     out.device()->seek(0);
     m_socket->write(block);
     m_socket->flush();
@@ -47,9 +47,10 @@ void LocalSocketIpcClient::send_MessageToServer(QString message) {
 
 void LocalSocketIpcClient::receiveMessage() {
     QDataStream in(m_socket);
-    in >> m_message;
-    qDebug() << "recved " << m_message;
-    emit messageReceived(m_message);
+    QString data;
+    in >> data;
+    qDebug() << "recved " << data;
+    emit messageReceived(data);
 }
 
 void LocalSocketIpcClient::socket_connected() {
@@ -61,5 +62,5 @@ void LocalSocketIpcClient::socket_disconnected() {
 }
 
 void LocalSocketIpcClient::socket_error(QLocalSocket::LocalSocketError) {
-    qDebug() << "socket_error " << m_socket->errorString();
+    emit messageReceived(QString("socket_error ").append(m_socket->errorString()));
 }
